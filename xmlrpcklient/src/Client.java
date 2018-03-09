@@ -6,13 +6,14 @@ import java.io.IOException;
 import java.util.Vector;
 
 public class Client {
-    private static Cli cli = new Cli();
+    private Cli cli = new Cli();
 
     public static void main(String[] args) throws XmlRpcException {
-        tryToUseServer();
+        Client client = new Client();
+        client.tryToUseServer();
     }
 
-    private static void tryToUseServer() throws XmlRpcException {
+    private void tryToUseServer() throws XmlRpcException {
         String url = cli.readHostname();
         int port = cli.readPort();
         try {
@@ -23,11 +24,19 @@ public class Client {
         }
     }
 
-    private static void useServer(String url, int port) throws XmlRpcException, IOException {
+    private void useServer(String url, int port) throws XmlRpcException, IOException {
         XmlRpcClient client = new XmlRpcClient(url, port);
         executeShow(client);
+        executeMethod(client);
         executeSum(client);
         executeSort(client);
+    }
+
+    private void executeMethod(XmlRpcClient client) throws XmlRpcException, IOException {
+        String serverPrefix = "myServer.";
+        String method = cli.readMethod();
+        String result = (String) client.execute(serverPrefix + method, new Vector<>());
+        System.out.println(result);
     }
 
     private static void executeShow(XmlRpcClient client) throws XmlRpcException, IOException {

@@ -4,13 +4,21 @@ public class Cli {
     private Scanner scanner = new Scanner(System.in);
 
     public String readHostname() {
-        System.out.print("Pass url: ");
-        return scanner.next();
+        return readString("Pass hostname");
     }
 
     public int readPort() {
         System.out.print("Pass port: ");
         return scanner.nextInt();
+    }
+
+    public String readMethod() {
+        return readString("Pass method name");
+    }
+
+    private String readString(String prompt) {
+        System.out.println(prompt + ": ");
+        return scanner.next();
     }
 
     public void printError() {
