@@ -69,7 +69,7 @@ fabric.properties
 
 # End of https://www.gitignore.io/api/intellij
 
-/.idea/
+.idea/
 client.iml
 server.iml
-/bin/
+bin/
