@@ -43,9 +43,10 @@ public class Server {
     }
 
     public String show() {
-        return "int sum(int x, int y) - zwraca sumê\n"
-                + "int difference(int minuend, int subtrahend) - zwraca ró¿nicê\n"
-                + "int sort(Vector<Integer> numbers - wypisuje posortowane liczby\n"
-                + "boolean isCharOnPosition(char c, int position, String text) - zwraca true, jeœli podany znak wystêpuje na podanej pozycji w danej tekœcie, inaczej false";
+        return "int sum(int x, int y) - returns sum of two integers\n"
+                + "int difference(int minuend, int subtrahend) - returns difference of two integers\n"
+                + "int sort(Vector<Integer> numbers - prints sorted integers\n"
+                + "boolean isCharOnPosition(char c, int position, String text) - returns true if the char is on the " +
+                "given position in the text, false otherwise";
     }
 }

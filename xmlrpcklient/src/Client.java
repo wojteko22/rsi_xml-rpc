@@ -9,8 +9,14 @@ public class Client {
 
     public static void main(String[] args) throws IOException, XmlRpcException {
         XmlRpcClient client = new XmlRpcClient("http://localhost:10003");
+        executeShow(client);
         executeSum(client);
         executeSort(client);
+    }
+
+    private static void executeShow(XmlRpcClient client) throws XmlRpcException, IOException {
+        String result = (String) client.execute("myServer.show", new Vector<>());
+        System.out.println(result);
     }
 
     private static void executeSum(XmlRpcClient client) throws XmlRpcException, IOException {
