@@ -13,7 +13,7 @@ public class MySortAsyncCallback implements AsyncCallback {
 	public void handleResult(Object rezultat, URL url, String metoda) {
 		long stopTime = System.currentTimeMillis();
 	    long elapsedTime = stopTime - startTime;
-	    System.out.println("Po stronie klienta sortowanie wykonywa³o siê " + elapsedTime + " ms");
+	    System.out.println("Sortowanie: czas to " + elapsedTime + " ms");
 	}
 	
 	@Override
