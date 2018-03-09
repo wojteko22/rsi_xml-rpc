@@ -5,27 +5,27 @@ import java.io.IOException;
 import java.util.Vector;
 
 public class Client {
-    private Cli cli = new Cli();
+    private final Cli cli = new Cli();
+    private final XmlRpcClient client;
 
-    public static void main(String[] args) throws XmlRpcException, IOException {
-        Client client = new Client();
-        client.tryToUseServer();
+    Client() throws XmlRpcException, IOException {
+        client = connectViaCli();
     }
 
-    private void tryToUseServer() throws XmlRpcException, IOException {
+    private XmlRpcClient connectViaCli() throws XmlRpcException, IOException {
         String url = cli.readHostname();
         int port = cli.readPort();
         try {
-            useServer(url, port);
+            return new XmlRpcClient(url, port);
         } catch (IOException e) {
-            handleRefusing(e, url);
+            return handleRefusing(e, url);
         }
     }
 
-    private void handleRefusing(IOException e, String url) throws XmlRpcException, IOException {
+    private XmlRpcClient handleRefusing(IOException e, String url) throws XmlRpcException, IOException {
         if (connectionRefused(e, url)) {
             cli.printError();
-            tryToUseServer();
+            return connectViaCli();
         }
         else throw e;
     }
@@ -42,19 +42,13 @@ public class Client {
         return e.getMessage().contains(url);
     }
 
-    private void useServer(String url, int port) throws XmlRpcException, IOException {
-        XmlRpcClient client = new XmlRpcClient(url, port);
-        executeShow(client);
-        executeCustomMethod(client);
-        executeKnownMethods(client);
-    }
-
-    private void executeKnownMethods(XmlRpcClient client) throws XmlRpcException, IOException {
+    void executeKnownMethods() throws XmlRpcException, IOException {
         MyServerClient myServerClient = new MyServerClient(client);
         myServerClient.executeAll();
     }
 
-    private void executeCustomMethod(XmlRpcClient client) throws XmlRpcException, IOException {
+    void executeCustomMethod() throws XmlRpcException, IOException {
+        executeShow();
         String serverPrefix = "myServer.";
         String method = cli.readMethod();
 
@@ -65,7 +59,7 @@ public class Client {
         System.out.println("\n" + result);
     }
 
-    private static void executeShow(XmlRpcClient client) throws XmlRpcException, IOException {
+    private void executeShow() throws XmlRpcException, IOException {
         String result = (String) client.execute("myServer.show", new Vector<>());
         System.out.println("\n" + result);
     }
