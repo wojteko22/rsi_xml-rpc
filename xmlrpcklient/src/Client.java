@@ -11,15 +11,9 @@ public class Client {
 			Vector<Integer> params = new Vector<Integer>();
 			params.addElement(new Integer(13));
 			params.addElement(new Integer(21));
-			Object result = srv.execute("myServer.echo", params);
+			Object result = srv.execute("myServer.sum", params);
 			int wynik = ((Integer) result).intValue();
 			System.out.println("Wynik: " + wynik);
-			
-			MyAsyncCallback callback = new MyAsyncCallback();
-			Vector<Integer> params2 = new Vector<Integer>();
-			params2.addElement(new Integer(1000));
-			srv.executeAsync("myServer.asy", params2, callback);
-			System.out.println("Wywolano asynchronicznie");
 
 			int size = 1000;
 			Integer[] arr = new Integer[size];
