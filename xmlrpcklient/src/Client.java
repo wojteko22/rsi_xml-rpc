@@ -45,8 +45,8 @@ public class Client {
     private void useServer(String url, int port) throws XmlRpcException, IOException {
         XmlRpcClient client = new XmlRpcClient(url, port);
         executeShow(client);
-        executeMethod(client);
-//        executeKnownMethods(client);
+        executeCustomMethod(client);
+        executeKnownMethods(client);
     }
 
     private void executeKnownMethods(XmlRpcClient client) throws XmlRpcException, IOException {
@@ -54,7 +54,7 @@ public class Client {
         myServerClient.executeAll();
     }
 
-    private void executeMethod(XmlRpcClient client) throws XmlRpcException, IOException {
+    private void executeCustomMethod(XmlRpcClient client) throws XmlRpcException, IOException {
         String serverPrefix = "myServer.";
         String method = cli.readMethod();
 
