@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.util.Scanner;
 import java.util.Vector;
 
 import org.apache.xmlrpc.AsyncCallback;
@@ -7,8 +8,28 @@ import org.apache.xmlrpc.XmlRpcException;
 
 public class Client {
 
-    public static void main(String[] args) throws IOException, XmlRpcException {
-        XmlRpcClient client = new XmlRpcClient("http://localhost:10003");
+    public static void main(String[] args) throws XmlRpcException {
+        tryToUseServer();
+    }
+
+    private static void tryToUseServer() throws XmlRpcException {
+        int port = readPort();
+        try {
+            useServer(port);
+        } catch (IOException e) {
+            System.out.println("Are you sure you passed proper port? Try 10003");
+            tryToUseServer();
+        }
+    }
+
+    private static int readPort() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Pass port: ");
+        return scanner.nextInt();
+    }
+
+    private static void useServer(int port) throws XmlRpcException, IOException {
+        XmlRpcClient client = new XmlRpcClient("http://localhost:" + port);
         executeShow(client);
         executeSum(client);
         executeSort(client);
