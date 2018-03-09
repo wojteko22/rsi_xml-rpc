@@ -1,38 +1,26 @@
-import java.io.IOException;
-import java.util.Scanner;
-import java.util.Vector;
-
 import org.apache.xmlrpc.AsyncCallback;
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 
+import java.io.IOException;
+import java.util.Vector;
+
 public class Client {
+    private static Cli cli = new Cli();
 
     public static void main(String[] args) throws XmlRpcException {
         tryToUseServer();
     }
 
     private static void tryToUseServer() throws XmlRpcException {
-        String url = readHostname();
-        int port = readPort();
+        String url = cli.readHostname();
+        int port = cli.readPort();
         try {
             useServer(url, port);
         } catch (IOException e) {
-            System.out.println("Are you sure you passed proper hostname and port? Try localhost and 3001");
+            cli.printError();
             tryToUseServer();
         }
-    }
-
-    private static String readHostname() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Pass url: ");
-        return scanner.next();
-    }
-
-    private static int readPort() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Pass port: ");
-        return scanner.nextInt();
     }
 
     private static void useServer(String url, int port) throws XmlRpcException, IOException {
