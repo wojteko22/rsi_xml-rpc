@@ -46,11 +46,12 @@ public class Client {
         XmlRpcClient client = new XmlRpcClient(url, port);
         executeShow(client);
         executeMethod(client);
+//        executeKnownMethods(client);
+    }
 
+    private void executeKnownMethods(XmlRpcClient client) throws XmlRpcException, IOException {
         MyServerClient myServerClient = new MyServerClient(client);
-        myServerClient.executeSum();
-        myServerClient.executeIsCharOnPosition();
-        myServerClient.executeSort();
+        myServerClient.executeAll();
     }
 
     private void executeMethod(XmlRpcClient client) throws XmlRpcException, IOException {

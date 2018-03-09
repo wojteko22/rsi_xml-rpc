@@ -13,7 +13,13 @@ class MyServerClient {
         this.client = client;
     }
 
-    void executeSum() throws XmlRpcException, IOException {
+    void executeAll() throws XmlRpcException, IOException {
+        executeSum();
+        executeIsCharOnPosition();
+        executeSort();
+    }
+
+    private void executeSum() throws XmlRpcException, IOException {
         Vector<Integer> params = prepareVectorOfIntegers();
         Object result = client.execute("myServer.sum", params);
         System.out.println("sum: " + result);
@@ -26,7 +32,7 @@ class MyServerClient {
         return params;
     }
 
-    void executeIsCharOnPosition() throws XmlRpcException, IOException {
+    private void executeIsCharOnPosition() throws XmlRpcException, IOException {
         Vector<Object> params = prepareVectorOfObjects();
         Object result = client.execute("myServer.isCharOnPosition", params);
         System.out.println("isCharOnPosition: " + result);
@@ -40,7 +46,7 @@ class MyServerClient {
         return params;
     }
 
-    void executeSort() {
+    private void executeSort() {
         Vector<Object[]> params = prepareVectorOfArrays();
         long startTime = System.currentTimeMillis();
         AsyncCallback sortCallback = new MySortAsyncCallback(startTime);
