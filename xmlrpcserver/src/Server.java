@@ -7,11 +7,11 @@ public class Server {
 
     public static void main(String[] args) {
         int port = 3001;
-        String name = "myServer";
+        String name = "s";
         WebServer server = new WebServer(port);
         server.addHandler(name, new Server());
         server.start();
-        System.out.println("Serwer " + name + " nasluchuje na porcie nr " + port);
+        System.out.println("Server " + name + " is listening on port " + port);
     }
 
     public int sum(int x, int y) {
@@ -25,8 +25,8 @@ public class Server {
     public int sort(Vector<Integer> numbers) {
         Object[] arr = numbers.toArray();
         long elapsedTime = sortAndMeasure(arr);
-        System.out.println("Posortowana tablica: " + Arrays.toString(arr));
-        System.out.println("Sortowanie wykonywa³o siê " + elapsedTime + " ms");
+        System.out.println("Sorted array: " + Arrays.toString(arr));
+        System.out.println("Sorting was executing for " + elapsedTime + " ms");
         return 0;
     }
 

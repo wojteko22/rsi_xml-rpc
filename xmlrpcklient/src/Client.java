@@ -2,14 +2,20 @@ import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.Vector;
 
 public class Client {
     private final Cli cli = new Cli();
     private final XmlRpcClient client;
+    private final String serverPrefix = "s.";
 
     Client() throws XmlRpcException, IOException {
         client = connectViaCli();
+    }
+
+    Client(String url) throws MalformedURLException {
+        client = new XmlRpcClient(url);
     }
 
     private XmlRpcClient connectViaCli() throws XmlRpcException, IOException {
@@ -43,24 +49,23 @@ public class Client {
     }
 
     void executeKnownMethods() throws XmlRpcException, IOException {
-        MyServerClient myServerClient = new MyServerClient(client);
-        myServerClient.executeAll();
+        DefaultServerClient defaultServerClient = new DefaultServerClient(client);
+        defaultServerClient.executeAll();
     }
 
     void executeCustomMethod() throws XmlRpcException, IOException {
         executeShow();
-        String serverPrefix = "myServer.";
         String method = cli.readMethod();
 
         Vector<Object> params = new Vector<>();
         cli.addCustomParams(params);
 
         Object result = client.execute(serverPrefix + method, params);
-        System.out.println("\n" + result);
+        System.out.println("\nResult of " + method + ": " + result);
     }
 
     private void executeShow() throws XmlRpcException, IOException {
-        String result = (String) client.execute("myServer.show", new Vector<>());
+        String result = (String) client.execute(serverPrefix + "show", new Vector<>());
         System.out.println("\n" + result);
     }
 }

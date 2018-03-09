@@ -5,15 +5,17 @@ import org.apache.xmlrpc.XmlRpcException;
 import java.io.IOException;
 import java.util.Vector;
 
-class MyServerClient {
+class DefaultServerClient {
 
     private final XmlRpcClient client;
+    private final String serverPrefix = "s.";
 
-    MyServerClient(XmlRpcClient client) {
+    DefaultServerClient(XmlRpcClient client) {
         this.client = client;
     }
 
     void executeAll() throws XmlRpcException, IOException {
+        System.out.println();
         executeSum();
         executeIsCharOnPosition();
         executeSort();
@@ -21,7 +23,7 @@ class MyServerClient {
 
     private void executeSum() throws XmlRpcException, IOException {
         Vector<Integer> params = prepareVectorOfIntegers();
-        Object result = client.execute("myServer.sum", params);
+        Object result = client.execute(serverPrefix + "sum", params);
         System.out.println("sum: " + result);
     }
 
@@ -34,7 +36,7 @@ class MyServerClient {
 
     private void executeIsCharOnPosition() throws XmlRpcException, IOException {
         Vector<Object> params = prepareVectorOfObjects();
-        Object result = client.execute("myServer.isCharOnPosition", params);
+        Object result = client.execute(serverPrefix + "isCharOnPosition", params);
         System.out.println("isCharOnPosition: " + result);
     }
 
@@ -50,7 +52,7 @@ class MyServerClient {
         Vector<Object[]> params = prepareVectorOfArrays();
         long startTime = System.currentTimeMillis();
         AsyncCallback sortCallback = new MySortAsyncCallback(startTime);
-        client.executeAsync("myServer.sort", params, sortCallback);
+        client.executeAsync(serverPrefix + "sort", params, sortCallback);
     }
 
     private static Vector<Object[]> prepareVectorOfArrays() {
