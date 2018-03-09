@@ -104,17 +104,17 @@ public class Client {
     }
 
     private static void executeSort(XmlRpcClient client) {
-        Vector<Integer[]> params = prepareVectorOfArrays();
+        Vector<Object[]> params = prepareVectorOfArrays();
         long startTime = System.currentTimeMillis();
         AsyncCallback sortCallback = new MySortAsyncCallback(startTime);
         client.executeAsync("myServer.sort", params, sortCallback);
     }
 
-    private static Vector<Integer[]> prepareVectorOfArrays() {
+    private static Vector<Object[]> prepareVectorOfArrays() {
         Integer[] arr = prepareArray();
-        Vector<Integer[]> params3 = new Vector<>();
-        params3.add(arr);
-        return params3;
+        Vector<Object[]> params = new Vector<>();
+        params.add(arr);
+        return params;
     }
 
     private static Integer[] prepareArray() {
