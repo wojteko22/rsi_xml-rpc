@@ -37,9 +37,13 @@ public class Server {
         return stopTime - startTime;
     }
 
-    public boolean isCharOnPosition(char c, int position, String text) {
+    public boolean isCharOnPosition(String c, int position, String text) {
+        if (c.length() != 1) {
+            return false;
+        }
+        char passedChar = c.charAt(0);
         char actualChar = text.charAt(position);
-        return c == actualChar;
+        return passedChar == actualChar;
     }
 
     public String show() {

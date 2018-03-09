@@ -17,7 +17,7 @@ public class Cli {
     }
 
     private String readString(String prompt) {
-        System.out.println(prompt + ": ");
+        System.out.print(prompt + ": ");
         return scanner.next();
     }
 

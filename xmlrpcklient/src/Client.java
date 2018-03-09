@@ -8,20 +8,39 @@ import java.util.Vector;
 public class Client {
     private Cli cli = new Cli();
 
-    public static void main(String[] args) throws XmlRpcException {
+    public static void main(String[] args) throws XmlRpcException, IOException {
         Client client = new Client();
         client.tryToUseServer();
     }
 
-    private void tryToUseServer() throws XmlRpcException {
+    private void tryToUseServer() throws XmlRpcException, IOException {
         String url = cli.readHostname();
         int port = cli.readPort();
         try {
             useServer(url, port);
         } catch (IOException e) {
+            handleRefusing(e, url);
+        }
+    }
+
+    private void handleRefusing(IOException e, String url) throws XmlRpcException, IOException {
+        if (connectionRefused(e, url)) {
             cli.printError();
             tryToUseServer();
         }
+        else throw e;
+    }
+
+    private boolean connectionRefused(IOException e, String url) {
+        return wrongPort(e) || wrongUrl(e, url);
+    }
+
+    private boolean wrongPort(IOException e) {
+        return e.getMessage().contains("Connection refused: connect");
+    }
+
+    private boolean wrongUrl(IOException e, String url) {
+        return e.getMessage().contains(url);
     }
 
     private void useServer(String url, int port) throws XmlRpcException, IOException {
@@ -29,13 +48,15 @@ public class Client {
         executeShow(client);
         executeMethod(client);
         executeSum(client);
+        executeIsCharOnPosition(client);
         executeSort(client);
     }
 
     private void executeMethod(XmlRpcClient client) throws XmlRpcException, IOException {
         String serverPrefix = "myServer.";
         String method = cli.readMethod();
-        String result = (String) client.execute(serverPrefix + method, new Vector<>());
+        Vector<Object> params = new Vector<>();
+        String result = (String) client.execute(serverPrefix + method, params);
         System.out.println(result);
     }
 
@@ -47,13 +68,27 @@ public class Client {
     private static void executeSum(XmlRpcClient client) throws XmlRpcException, IOException {
         Vector<Integer> params = prepareVectorOfIntegers();
         Object result = client.execute("myServer.sum", params);
-        System.out.println("Sum: wynik to " + result);
+        System.out.println("sum: " + result);
     }
 
     private static Vector<Integer> prepareVectorOfIntegers() {
         Vector<Integer> params = new Vector<>();
         params.addElement(13);
         params.addElement(21);
+        return params;
+    }
+
+    private void executeIsCharOnPosition(XmlRpcClient client) throws XmlRpcException, IOException {
+        Vector<Object> params = prepareVectorOfObjects();
+        Object result = client.execute("myServer.isCharOnPosition", params);
+        System.out.println("isCharOnPosition: " + result);
+    }
+
+    private Vector<Object> prepareVectorOfObjects() {
+        Vector<Object> params = new Vector<>();
+        params.add("o");
+        params.add(1);
+        params.add("dog");
         return params;
     }
 
