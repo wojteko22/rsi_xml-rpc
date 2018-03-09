@@ -5,7 +5,7 @@ import org.apache.xmlrpc.AsyncCallback;
 public class MySortAsyncCallback implements AsyncCallback {
 	private final long startTime;
 	
-	public MySortAsyncCallback(long startTime) {
+	MySortAsyncCallback(long startTime) {
 		this.startTime = startTime;
 	}
 

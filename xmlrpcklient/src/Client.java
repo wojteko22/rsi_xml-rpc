@@ -8,11 +8,11 @@ public class Client {
 	public static void main(String[] args) {
 		try {
 			XmlRpcClient srv = new XmlRpcClient("http://localhost:10003");
-			Vector<Integer> params = new Vector<Integer>();
-			params.addElement(new Integer(13));
-			params.addElement(new Integer(21));
+			Vector<Integer> params = new Vector<>();
+			params.addElement(13);
+			params.addElement(21);
 			Object result = srv.execute("myServer.sum", params);
-			int wynik = ((Integer) result).intValue();
+			int wynik = (Integer) result;
 			System.out.println("Wynik: " + wynik);
 
 			int size = 1000;
@@ -20,7 +20,7 @@ public class Client {
 			for (int i = 0; i < size; i++) {
 				arr[i] = size - i;
 			}
-			Vector<Integer[]> params3 = new Vector<Integer[]>();
+			Vector<Integer[]> params3 = new Vector<>();
 			params3.add(arr);
 			long startTime = System.currentTimeMillis();
 			AsyncCallback sortCallback = new MySortAsyncCallback(startTime);
