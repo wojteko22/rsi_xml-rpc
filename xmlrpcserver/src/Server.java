@@ -6,7 +6,7 @@ import org.apache.xmlrpc.WebServer;
 public class Server {
 
     public static void main(String[] args) {
-        int port = 10003;
+        int port = 3001;
         String name = "myServer";
         WebServer server = new WebServer(port);
         server.addHandler(name, new Server());

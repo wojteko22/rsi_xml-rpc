@@ -13,13 +13,20 @@ public class Client {
     }
 
     private static void tryToUseServer() throws XmlRpcException {
+        String url = readHostname();
         int port = readPort();
         try {
-            useServer(port);
+            useServer(url, port);
         } catch (IOException e) {
-            System.out.println("Are you sure you passed proper port? Try 10003");
+            System.out.println("Are you sure you passed proper hostname and port? Try localhost and 3001");
             tryToUseServer();
         }
+    }
+
+    private static String readHostname() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Pass url: ");
+        return scanner.next();
     }
 
     private static int readPort() {
@@ -28,8 +35,8 @@ public class Client {
         return scanner.nextInt();
     }
 
-    private static void useServer(int port) throws XmlRpcException, IOException {
-        XmlRpcClient client = new XmlRpcClient("http://localhost:" + port);
+    private static void useServer(String url, int port) throws XmlRpcException, IOException {
+        XmlRpcClient client = new XmlRpcClient(url, port);
         executeShow(client);
         executeSum(client);
         executeSort(client);
@@ -37,7 +44,7 @@ public class Client {
 
     private static void executeShow(XmlRpcClient client) throws XmlRpcException, IOException {
         String result = (String) client.execute("myServer.show", new Vector<>());
-        System.out.println(result);
+        System.out.println("\n" + result);
     }
 
     private static void executeSum(XmlRpcClient client) throws XmlRpcException, IOException {
