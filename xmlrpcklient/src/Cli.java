@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.util.Vector;
 
 public class Cli {
     private Scanner scanner = new Scanner(System.in);
@@ -8,25 +9,48 @@ public class Cli {
     }
 
     public int readPort() {
-        System.out.print("Type port: ");
-        return scanner.nextInt();
+        return readInt("Type port");
     }
 
     public String readMethod() {
         return readString("\nType method name");
     }
 
-    public Object readParams() {
+    private Object readParam() {
         System.out.println(
                 "\nNo more params (n)\n" +
-                "Read String. (s)\n" +
-                "Read int. (i)");
-        String choice = readString("Type proper number");
+                        "Read String. (s)\n" +
+                        "Read int. (i)\n" +
+                        "Read array. (a)"
+        );
+        String choice = readString("Type proper letter");
         switch (choice) {
-            case "n": return null;
-            case "s": return readString("Type param");
-            case "i": return readInt("Type int");
-            default: return readParams();
+            case "n":
+                return null;
+            case "s":
+                return readString("Type String");
+            case "i":
+                return readInt("Type int");
+            case "a":
+                return readArray();
+            default:
+                return readParam();
+        }
+    }
+
+    private Object readArray() {
+        Vector<Object> vector = new Vector<>();
+        System.out.println("\nPass array elements");
+        addCustomParams(vector);
+        System.out.println("\nArray is filled");
+        return vector.toArray();
+    }
+
+    public void addCustomParams(Vector<Object> params) {
+        Object param = readParam();
+        if (param != null) {
+            params.addElement(param);
+            addCustomParams(params);
         }
     }
 
