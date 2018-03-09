@@ -19,11 +19,15 @@ public class Cli {
     private Object readParam() {
         System.out.println(
                 "\nNo more params (n)\n" +
-                        "Read String. (s)\n" +
-                        "Read int. (i)\n" +
-                        "Read array. (a)"
+                        "Read String (s)\n" +
+                        "Read int (i)\n" +
+                        "Read array (a)"
         );
         String choice = readString("Type proper letter");
+        return makeAChoice(choice);
+    }
+
+    private Object makeAChoice(String choice) {
         switch (choice) {
             case "n":
                 return null;
@@ -36,6 +40,16 @@ public class Cli {
             default:
                 return readParam();
         }
+    }
+
+    private String readString(String prompt) {
+        System.out.print(prompt + ": ");
+        return scanner.next();
+    }
+
+    private int readInt(String prompt) {
+        System.out.print(prompt + ": ");
+        return scanner.nextInt();
     }
 
     private Object readArray() {
@@ -52,16 +66,6 @@ public class Cli {
             params.addElement(param);
             addCustomParams(params);
         }
-    }
-
-    private int readInt(String prompt) {
-        System.out.print(prompt + ": ");
-        return scanner.nextInt();
-    }
-
-    private String readString(String prompt) {
-        System.out.print(prompt + ": ");
-        return scanner.next();
     }
 
     public void printError() {
