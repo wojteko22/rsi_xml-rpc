@@ -55,9 +55,20 @@ public class Client {
     private void executeMethod(XmlRpcClient client) throws XmlRpcException, IOException {
         String serverPrefix = "myServer.";
         String method = cli.readMethod();
+
         Vector<Object> params = new Vector<>();
-        String result = (String) client.execute(serverPrefix + method, params);
-        System.out.println(result);
+        addParams(params);
+
+        Object result = client.execute(serverPrefix + method, params);
+        System.out.println("\n" + result);
+    }
+
+    private void addParams(Vector<Object> params) {
+        Object param = cli.readParams();
+        if (param != null) {
+            params.addElement(param);
+            addParams(params);
+        }
     }
 
     private static void executeShow(XmlRpcClient client) throws XmlRpcException, IOException {
