@@ -34,10 +34,7 @@ public class CustomClient {
     void executeCustomMethod() throws XmlRpcException, IOException, InterruptedException {
         System.out.println("\n" + executeShow());
         String method = cli.readString("\nType method name");
-
-        Vector<Object> params = new Vector<>();
-        cli.addCustomParams(params);
-
+        Vector<Object> params = cli.readParams();
         Object result = executeOnServer(method, params);
         System.out.println("\nResult of " + method + ": " + result);
     }

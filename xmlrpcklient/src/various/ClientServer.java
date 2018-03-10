@@ -33,9 +33,17 @@ public class ClientServer {
 
     private void executeSomewhere() throws XmlRpcException, IOException, InterruptedException {
         int number = cli.readInt("\nType client/server number");
+        printDescription(number);
+        String method = cli.readString("\nType method name");
+        Vector<Object> params = cli.readParams();
+        Object result = executeOnServer(number, method, params);
+        System.out.println("\nResult of " + method + ": " + result);
+        executeSomewhere();
+    }
+
+    private void printDescription(int number) throws InterruptedException, XmlRpcException, IOException {
         Object result = executeOnServer(number, "show", new Vector<>());
         System.out.println(result);
-        executeSomewhere();
     }
 
     public Object executeOnServer(int number, String method, Vector methodParams) throws InterruptedException, XmlRpcException, IOException {
