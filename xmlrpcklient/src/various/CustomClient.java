@@ -1,3 +1,5 @@
+package various;
+
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 
@@ -5,17 +7,21 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Vector;
 
-public class Client {
+public class CustomClient {
     private final Cli cli = new Cli();
     private final XmlRpcClient client;
     private final String serverPrefix = "s.";
 
-    Client() throws XmlRpcException, IOException {
+    CustomClient() throws XmlRpcException, IOException {
         client = connectViaCli();
     }
 
-    Client(String url) throws MalformedURLException {
+    CustomClient(String url) throws MalformedURLException {
         client = new XmlRpcClient(url);
+    }
+
+    CustomClient(String hostname, int port) throws MalformedURLException {
+        client = new XmlRpcClient(hostname, port);
     }
 
     private XmlRpcClient connectViaCli() throws XmlRpcException, IOException {
@@ -64,7 +70,7 @@ public class Client {
         System.out.println("\nResult of " + method + ": " + result);
     }
 
-    private void executeShow() throws XmlRpcException, IOException {
+    void executeShow() throws XmlRpcException, IOException {
         String result = (String) client.execute(serverPrefix + "show", new Vector<>());
         System.out.println("\n" + result);
     }

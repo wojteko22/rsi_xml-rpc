@@ -5,7 +5,11 @@ import org.apache.xmlrpc.WebServer;
 
 public class Server {
 
-    public void run(int port) {
+    Server(int port) {
+        serve(port);
+    }
+
+    private void serve(int port) {
         String name = "s";
         WebServer server = new WebServer(port);
         server.addHandler(name, this);
