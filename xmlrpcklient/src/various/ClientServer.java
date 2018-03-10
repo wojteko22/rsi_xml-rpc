@@ -11,30 +11,30 @@ public class ClientServer extends Server {
     private final int myNumber;
     private final Cli cli = new Cli();
 
-    public ClientServer(int myNumber, int serverNumber) throws InterruptedException, IOException, XmlRpcException {
+    public ClientServer(int myNumber, int serverNumber) throws IOException {
         super(defaultPort + myNumber);
         this.myNumber = myNumber;
-        client = connectTo(defaultPort + serverNumber);
+        client = new CustomClient("localhost", defaultPort + serverNumber);
         executeSomewhere();
     }
 
-    private CustomClient connectTo(int port) throws IOException {
-        return new CustomClient("localhost", port);
-    }
-
-    private void executeSomewhere() throws XmlRpcException, IOException, InterruptedException {
-        int number = cli.readInt("\nType client/server number");
-        printDescription(number);
+    private void executeSomewhere() {
+        int destination = cli.readInt("\nType destination number");
+        printResult(destination, "show", new Vector<>(), "");
         String method = cli.readString("\nType method name");
         Vector<Object> params = cli.readParams();
-        Object result = executeOnServer(number, method, params, new Vector<>());
-        System.out.println("\nResult of " + method + ": " + result);
+        printResult(destination, method, params, "\nResult of " + method + ": ");
         executeSomewhere();
     }
 
-    private void printDescription(int number) throws InterruptedException, XmlRpcException, IOException {
-        Object result = executeOnServer(number, "show", new Vector<>(), new Vector<>());
-        System.out.println(result);
+    private void printResult(int destination, String method, Vector<Object> params, String text) {
+        try {
+            Object result = executeOnServer(destination, method, params, new Vector<>());
+            System.out.println(text + result);
+        } catch (Exception e) {
+            System.out.println("\n" + e);
+            executeSomewhere();
+        }
     }
 
     public Object executeOnServer(int destination, String method, Vector methodParams, Vector<Integer> visited) throws InterruptedException, XmlRpcException, IOException {
@@ -42,7 +42,6 @@ public class ClientServer extends Server {
             throw new RuntimeException("Such server does not belong to servers ring. Cannot invoke method");
         }
         visited.add(myNumber);
-        System.out.println("\nI am server " + myNumber + ", I have request to server " + destination);
         Vector<Integer> paramsFromNumber = makeParamsFromNumber(destination);
         boolean properServer = (Boolean) client.executeOnServer("hasNumber", paramsFromNumber);
         if (properServer) {

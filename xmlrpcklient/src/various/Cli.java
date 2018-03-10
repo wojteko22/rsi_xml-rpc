@@ -1,5 +1,6 @@
 package various;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -13,7 +14,13 @@ public class Cli {
 
     int readInt(String prompt) {
         System.out.print(prompt + ": ");
-        return scanner.nextInt();
+        try {
+            return scanner.nextInt();
+        } catch (InputMismatchException e) {
+            scanner.nextLine();
+            System.out.println("\n" + e);
+            return readInt(prompt);
+        }
     }
 
     Vector<Object> readParams() {
