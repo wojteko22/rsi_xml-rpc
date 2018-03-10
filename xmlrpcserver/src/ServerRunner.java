@@ -1,6 +1,6 @@
 public class ServerRunner {
 
     public static void main(String[] args) {
-        Server.serve(3001);
+        new Server(3001);
     }
 }
