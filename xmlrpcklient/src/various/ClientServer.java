@@ -33,26 +33,33 @@ public class ClientServer {
 
     private void executeSomewhere() throws XmlRpcException, IOException, InterruptedException {
         int number = cli.readInt("\nType client/server number");
-        String result = executeOnServer(number);
+        Object result = executeOnServer(number, "show", new Vector<>());
         System.out.println(result);
         executeSomewhere();
     }
 
-    public String executeOnServer(int number) throws InterruptedException, XmlRpcException, IOException {
-        System.out.println("I am server " + myNumber + ", I have request to server " + number);
-        Vector<Integer> params = new Vector<>();
-        params.add(number);
-        boolean properServer = (Boolean) client.executeOnServer("hasNumber", params);
+    public Object executeOnServer(int number, String method, Vector methodParams) throws InterruptedException, XmlRpcException, IOException {
+        System.out.println("\nI am server " + myNumber + ", I have request to server " + number + "\n");
+        Vector<Integer> paramsFromNumber = makeParamsFromNumber(number);
+        boolean properServer = (Boolean) client.executeOnServer("hasNumber", paramsFromNumber);
         if (properServer) {
-            return client.executeShow();
+            return client.executeOnServer(method, methodParams);
         } else {
-            return (String) passFurther(number);
+            return passFurther(number, method, methodParams);
         }
     }
 
-    private Object passFurther(int number) throws InterruptedException, XmlRpcException, IOException {
+    private Vector<Integer> makeParamsFromNumber(int number) {
         Vector<Integer> params = new Vector<>();
         params.add(number);
+        return params;
+    }
+
+    private Object passFurther(int number, String method, Vector methodParams) throws InterruptedException, XmlRpcException, IOException {
+        Vector<Object> params = new Vector<>();
+        params.add(number);
+        params.add(method);
+        params.add(methodParams);
         return client.executeOnServer("executeOnServer", params);
     }
 
