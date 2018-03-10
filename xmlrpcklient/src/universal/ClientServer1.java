@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class ClientServer1 {
 
-    public static void main(String[] args) throws IOException, XmlRpcException, InterruptedException {
+    public static void main(String[] args) throws InterruptedException, XmlRpcException, IOException {
         int myNumber = 1;
         new ClientServer(myNumber, myNumber + 1);
     }

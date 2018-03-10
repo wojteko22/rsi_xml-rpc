@@ -26,14 +26,14 @@ public class CustomClient {
     }
 
     private XmlRpcClient connectViaCli() throws IOException {
-        String url = cli.readHostname();
-        int port = cli.readPort();
-        return new XmlRpcClient(url, port);
+        String hostname = cli.readString("Type hostname");
+        int port = cli.readInt("Type port");
+        return new XmlRpcClient(hostname, port);
     }
 
     void executeCustomMethod() throws XmlRpcException, IOException, InterruptedException {
         executeShow();
-        String method = cli.readMethod();
+        String method = cli.readString("\nType method name");
 
         Vector<Object> params = new Vector<>();
         cli.addCustomParams(params);

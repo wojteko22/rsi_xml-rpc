@@ -30,15 +30,7 @@ public class ClientServer {
     }
 
     private void executeShow() throws XmlRpcException, IOException, InterruptedException {
-        try {
-            client.executeShow();
-        } catch (IOException e) {
-            if (e.getMessage().contains("Connection refused: connect")) {
-                System.out.println("Waiting for connection");
-                Thread.sleep(2000);
-                executeShow();
-            } else throw e;
-        }
+        client.executeShow();
     }
 
     public String show() {

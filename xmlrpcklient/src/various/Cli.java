@@ -6,18 +6,6 @@ import java.util.Vector;
 public class Cli {
     private Scanner scanner = new Scanner(System.in);
 
-    public String readHostname() {
-        return readString("Type hostname");
-    }
-
-    public int readPort() {
-        return readInt("Type port");
-    }
-
-    public String readMethod() {
-        return readString("\nType method name");
-    }
-
     private Object readParam() {
         System.out.println(
                 "\nNo more params (n)\n" +
@@ -44,12 +32,12 @@ public class Cli {
         }
     }
 
-    private String readString(String prompt) {
+    String readString(String prompt) {
         System.out.print(prompt + ": ");
         return scanner.next();
     }
 
-    private int readInt(String prompt) {
+    int readInt(String prompt) {
         System.out.print(prompt + ": ");
         return scanner.nextInt();
     }
