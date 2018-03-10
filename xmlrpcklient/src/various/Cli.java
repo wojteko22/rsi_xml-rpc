@@ -69,8 +69,4 @@ public class Cli {
             addCustomParams(params);
         }
     }
-
-    public void printError() {
-        System.out.println("Are you sure you passed proper hostname and port? Try localhost and 3001");
-    }
 }

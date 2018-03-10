@@ -1,31 +1,29 @@
 package various;
 
 import org.apache.xmlrpc.AsyncCallback;
-import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 
 import java.io.IOException;
 import java.util.Vector;
 
-class DefaultServerClient {
+class DefaultClient {
 
-    private final XmlRpcClient client;
-    private final String serverPrefix = "s.";
+    private final CustomClient client;
 
-    DefaultServerClient(XmlRpcClient client) {
+    DefaultClient(CustomClient client) {
         this.client = client;
     }
 
-    void executeAll() throws XmlRpcException, IOException {
+    void executeAll() throws XmlRpcException, IOException, InterruptedException {
         System.out.println();
         executeSum();
         executeIsCharOnPosition();
         executeSort();
     }
 
-    private void executeSum() throws XmlRpcException, IOException {
+    private void executeSum() throws XmlRpcException, IOException, InterruptedException {
         Vector<Integer> params = prepareVectorOfIntegers();
-        Object result = client.execute(serverPrefix + "sum", params);
+        Object result = client.executeOnServer( "sum", params);
         System.out.println("sum: " + result);
     }
 
@@ -36,9 +34,9 @@ class DefaultServerClient {
         return params;
     }
 
-    private void executeIsCharOnPosition() throws XmlRpcException, IOException {
+    private void executeIsCharOnPosition() throws XmlRpcException, IOException, InterruptedException {
         Vector<Object> params = prepareVectorOfObjects();
-        Object result = client.execute(serverPrefix + "isCharOnPosition", params);
+        Object result = client.executeOnServer("isCharOnPosition", params);
         System.out.println("isCharOnPosition: " + result);
     }
 
@@ -54,7 +52,7 @@ class DefaultServerClient {
         Vector<Object[]> params = prepareVectorOfArrays();
         long startTime = System.currentTimeMillis();
         AsyncCallback sortCallback = new MySortAsyncCallback(startTime);
-        client.executeAsync(serverPrefix + "sort", params, sortCallback);
+        client.executeAsyncOnServer("sort", params, sortCallback);
     }
 
     private static Vector<Object[]> prepareVectorOfArrays() {

@@ -1,5 +1,6 @@
 package various;
 
+import org.apache.xmlrpc.AsyncCallback;
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 
@@ -12,7 +13,7 @@ public class CustomClient {
     private final XmlRpcClient client;
     private final String serverPrefix = "s.";
 
-    CustomClient() throws XmlRpcException, IOException {
+    CustomClient() throws IOException {
         client = connectViaCli();
     }
 
@@ -24,54 +25,61 @@ public class CustomClient {
         client = new XmlRpcClient(hostname, port);
     }
 
-    private XmlRpcClient connectViaCli() throws XmlRpcException, IOException {
+    private XmlRpcClient connectViaCli() throws IOException {
         String url = cli.readHostname();
         int port = cli.readPort();
-        try {
-            return new XmlRpcClient(url, port);
-        } catch (IOException e) {
-            return handleRefusing(e, url);
-        }
+        return new XmlRpcClient(url, port);
     }
 
-    private XmlRpcClient handleRefusing(IOException e, String url) throws XmlRpcException, IOException {
-        if (connectionRefused(e, url)) {
-            cli.printError();
-            return connectViaCli();
-        }
-        else throw e;
-    }
-
-    private boolean connectionRefused(IOException e, String url) {
-        return wrongPort(e) || wrongUrl(e, url);
-    }
-
-    private boolean wrongPort(IOException e) {
-        return e.getMessage().contains("Connection refused: connect");
-    }
-
-    private boolean wrongUrl(IOException e, String url) {
-        return e.getMessage().contains(url);
-    }
-
-    void executeKnownMethods() throws XmlRpcException, IOException {
-        DefaultServerClient defaultServerClient = new DefaultServerClient(client);
-        defaultServerClient.executeAll();
-    }
-
-    void executeCustomMethod() throws XmlRpcException, IOException {
+    void executeCustomMethod() throws XmlRpcException, IOException, InterruptedException {
         executeShow();
         String method = cli.readMethod();
 
         Vector<Object> params = new Vector<>();
         cli.addCustomParams(params);
 
-        Object result = client.execute(serverPrefix + method, params);
+        Object result = executeOnServer(method, params);
         System.out.println("\nResult of " + method + ": " + result);
     }
 
-    void executeShow() throws XmlRpcException, IOException {
-        String result = (String) client.execute(serverPrefix + "show", new Vector<>());
+    void executeShow() throws XmlRpcException, IOException, InterruptedException {
+        String result = (String) executeOnServer("show", new Vector<>());
         System.out.println("\n" + result);
+    }
+
+    Object executeOnServer(String method, Vector params) throws XmlRpcException, IOException, InterruptedException {
+        try {
+            return client.execute(serverPrefix + method, params);
+        } catch (IOException e) {
+            handleWrongHostname(e);
+            return handleWrongPort(method, params, e);
+        }
+    }
+
+    private void handleWrongHostname(IOException e) {
+        if (wrongHost(e)) {
+            System.out.println("You probably passed wrong hostname. Try localhost");
+        }
+    }
+
+    private Object handleWrongPort(String method, Vector params, IOException e) throws InterruptedException, XmlRpcException, IOException {
+        if (wrongPort(e)) {
+            System.out.println("Waiting for connection");
+            Thread.sleep(2000);
+            return executeOnServer(method, params);
+        } else throw e;
+    }
+
+    private boolean wrongHost(IOException e) {
+        String host = client.getURL().getHost();
+        return e.getMessage().contains(host);
+    }
+
+    private boolean wrongPort(IOException e) {
+        return e.getMessage().contains("Connection refused: connect");
+    }
+
+    void executeAsyncOnServer(String method, Vector params, AsyncCallback callback) {
+        client.executeAsync(serverPrefix + method, params, callback);
     }
 }

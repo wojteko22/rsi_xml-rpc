@@ -7,8 +7,10 @@ import java.io.IOException;
 
 public class ClientServer {
     private final CustomClient client;
+    private final int myNumber;
 
     public ClientServer(int myNumber, int serverNumber) throws InterruptedException, IOException, XmlRpcException {
+        this.myNumber = myNumber;
         int defaultPort = 3000;
         serve(defaultPort + myNumber);
         client = connectTo(defaultPort + serverNumber);
@@ -31,7 +33,6 @@ public class ClientServer {
         try {
             client.executeShow();
         } catch (IOException e) {
-            System.out.println(e.getMessage());
             if (e.getMessage().contains("Connection refused: connect")) {
                 System.out.println("Waiting for connection");
                 Thread.sleep(2000);
@@ -41,6 +42,6 @@ public class ClientServer {
     }
 
     public String show() {
-        return "I am server";
+        return "This is response from server " + myNumber;
     }
 }
