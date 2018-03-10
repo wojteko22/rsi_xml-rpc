@@ -37,14 +37,14 @@ public class ClientServer extends Server {
         System.out.println(result);
     }
 
-    public Object executeOnServer(int number, String method, Vector methodParams) throws InterruptedException, XmlRpcException, IOException {
-        System.out.println("\nI am server " + myNumber + ", I have request to server " + number);
-        Vector<Integer> paramsFromNumber = makeParamsFromNumber(number);
+    public Object executeOnServer(int destination, String method, Vector methodParams) throws InterruptedException, XmlRpcException, IOException {
+        System.out.println("\nI am server " + myNumber + ", I have request to server " + destination);
+        Vector<Integer> paramsFromNumber = makeParamsFromNumber(destination);
         boolean properServer = (Boolean) client.executeOnServer("hasNumber", paramsFromNumber);
         if (properServer) {
             return client.executeOnServer(method, methodParams);
         } else {
-            return passFurther(number, method, methodParams);
+            return passFurther(destination, method, methodParams);
         }
     }
 
@@ -54,9 +54,9 @@ public class ClientServer extends Server {
         return params;
     }
 
-    private Object passFurther(int number, String method, Vector methodParams) throws InterruptedException, XmlRpcException, IOException {
+    private Object passFurther(int destination, String method, Vector methodParams) throws InterruptedException, XmlRpcException, IOException {
         Vector<Object> params = new Vector<>();
-        params.add(number);
+        params.add(destination);
         params.add(method);
         params.add(methodParams);
         return client.executeOnServer("executeOnServer", params);
