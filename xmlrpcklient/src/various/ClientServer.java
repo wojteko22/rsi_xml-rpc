@@ -38,18 +38,34 @@ public class ClientServer {
         executeSomewhere();
     }
 
-    private String executeOnServer(int number) throws InterruptedException, XmlRpcException, IOException {
+    public String executeOnServer(int number) throws InterruptedException, XmlRpcException, IOException {
+        System.out.println("I am server " + myNumber + ", I have request to server " + number);
         Vector<Integer> params = new Vector<>();
         params.add(number);
-        return (String) client.executeOnServer("show", params);
+        boolean properServer = (Boolean) client.executeOnServer("hasNumber", params);
+        if (properServer) {
+            return client.executeShow();
+        } else {
+            return (String) passFurther(number);
+        }
     }
 
-    public String show(int number) throws InterruptedException, XmlRpcException, IOException {
-        if (number == myNumber) {
-            return "this is response from server " + myNumber;
-        }
-        else {
-            return executeOnServer(number) + ", passed by server " + myNumber;
-        }
+    private Object passFurther(int number) throws InterruptedException, XmlRpcException, IOException {
+        Vector<Integer> params = new Vector<>();
+        params.add(number);
+        return client.executeOnServer("executeOnServer", params);
+    }
+
+    public boolean hasNumber(int number) {
+        return myNumber == number;
+    }
+
+    public String show() {
+        return "I am server " + myNumber + ". Here are my methods:\n"
+                + "int sum(int x, int y) - returns sum of two integers\n"
+                + "int difference(int minuend, int subtrahend) - returns difference of two integers\n"
+                + "int sort(Vector<Integer> numbers - prints sorted integers\n"
+                + "boolean isCharOnPosition(char c, int position, String text) - returns true if the char is on the " +
+                "given position in the text, false otherwise";
     }
 }

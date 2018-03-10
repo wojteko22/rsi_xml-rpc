@@ -32,7 +32,7 @@ public class CustomClient {
     }
 
     void executeCustomMethod() throws XmlRpcException, IOException, InterruptedException {
-        executeShow();
+        System.out.println("\n" + executeShow());
         String method = cli.readString("\nType method name");
 
         Vector<Object> params = new Vector<>();
@@ -42,9 +42,8 @@ public class CustomClient {
         System.out.println("\nResult of " + method + ": " + result);
     }
 
-    void executeShow() throws XmlRpcException, IOException, InterruptedException {
-        String result = (String) executeOnServer("show", new Vector<>());
-        System.out.println("\n" + result);
+    String executeShow() throws XmlRpcException, IOException, InterruptedException {
+        return (String) executeOnServer("show", new Vector<>());
     }
 
     Object executeOnServer(String method, Vector params) throws XmlRpcException, IOException, InterruptedException {
