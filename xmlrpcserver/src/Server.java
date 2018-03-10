@@ -4,15 +4,16 @@ import java.util.Vector;
 import org.apache.xmlrpc.WebServer;
 
 public class Server {
+    private final int port;
 
-    Server(int port) {
-        serve(port);
+    private Server(int port) {
+        this.port = port;
     }
 
-    private void serve(int port) {
+    static void serve(int port) {
         String name = "s";
         WebServer server = new WebServer(port);
-        server.addHandler(name, this);
+        server.addHandler(name, new Server(port));
         server.start();
         System.out.println("Server " + name + " is listening on port " + port);
     }
@@ -40,20 +41,15 @@ public class Server {
         return stopTime - startTime;
     }
 
-    public boolean isCharOnPosition(String c, int position, String text) {
-        if (c.length() != 1) {
-            return false;
-        }
-        char passedChar = c.charAt(0);
-        char actualChar = text.charAt(position);
-        return passedChar == actualChar;
+    public boolean isSoLong(int length, String text) {
+        return text.length() == length;
     }
 
     public String show() {
-        return "int sum(int x, int y) - returns sum of two integers\n"
-                + "int difference(int minuend, int subtrahend) - returns difference of two integers\n"
-                + "int sort(Vector<Integer> numbers - prints sorted integers\n"
-                + "boolean isCharOnPosition(char c, int position, String text) - returns true if the char is on the " +
-                "given position in the text, false otherwise";
+        return "I am server on port " + port + ". Here are my method:\n"
+                + "- int sum(int x, int y) - returns sum of two integers\n"
+                + "- int difference(int minuend, int subtrahend) - returns difference of two integers\n"
+                + "- int sort(Vector<Integer> numbers - prints sorted integers\n"
+                + "- isSoLong(int length, String text) - returns true, if text has length characters, false otherwise";
     }
 }

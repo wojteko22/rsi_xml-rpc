@@ -17,35 +17,49 @@ class DefaultClient {
     void executeAll() throws XmlRpcException, IOException, InterruptedException {
         System.out.println();
         executeSum();
-        executeIsCharOnPosition();
+        executeDifference();
+        executeIsSoLong();
         executeSort();
     }
 
     private void executeSum() throws XmlRpcException, IOException, InterruptedException {
-        Vector<Integer> params = prepareVectorOfIntegers();
-        Object result = client.executeOnServer( "sum", params);
-        System.out.println("sum: " + result);
+        String method = "sum";
+        executeOnTwoIntegers(method);
     }
 
-    private static Vector<Integer> prepareVectorOfIntegers() {
+    private void executeDifference() throws XmlRpcException, IOException, InterruptedException {
+        String method = "difference";
+        executeOnTwoIntegers(method);
+    }
+
+    private void executeOnTwoIntegers(String method) throws XmlRpcException, IOException, InterruptedException {
+        Vector<Integer> params = prepareVectorOfTwoIntegers();
+        printResult(method, params);
+    }
+
+    private static Vector<Integer> prepareVectorOfTwoIntegers() {
         Vector<Integer> params = new Vector<>();
-        params.addElement(13);
-        params.addElement(21);
+        params.addElement(3);
+        params.addElement(2);
         return params;
     }
 
-    private void executeIsCharOnPosition() throws XmlRpcException, IOException, InterruptedException {
+    private void executeIsSoLong() throws XmlRpcException, IOException, InterruptedException {
+        String method = "isSoLong";
         Vector<Object> params = prepareVectorOfObjects();
-        Object result = client.executeOnServer("isCharOnPosition", params);
-        System.out.println("isCharOnPosition: " + result);
+        printResult(method, params);
     }
 
     private Vector<Object> prepareVectorOfObjects() {
         Vector<Object> params = new Vector<>();
-        params.add("o");
-        params.add(1);
+        params.add(3);
         params.add("dog");
         return params;
+    }
+
+    private void printResult(String method, Vector params) throws XmlRpcException, IOException, InterruptedException {
+        Object result = client.executeOnServer(method, params);
+        System.out.println(method + ": " + result);
     }
 
     private void executeSort() {
