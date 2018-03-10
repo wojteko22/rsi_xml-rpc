@@ -5,11 +5,10 @@ import org.apache.xmlrpc.WebServer;
 
 public class Server {
 
-    public static void main(String[] args) {
-        int port = 3001;
+    public void run(int port) {
         String name = "s";
         WebServer server = new WebServer(port);
-        server.addHandler(name, new Server());
+        server.addHandler(name, this);
         server.start();
         System.out.println("Server " + name + " is listening on port " + port);
     }
