@@ -52,6 +52,6 @@ public class Server {
                 + "- int sum(int x, int y) - returns sum of two integers\n"
                 + "- int difference(int minuend, int subtrahend) - returns difference of two integers\n"
                 + "- int sort(Vector<Integer> numbers) - prints sorted integers\n"
-                + "- isSoLong(int length, String text) - returns true, if text has length characters, false otherwise";
+                + "- isSoLong(int length, String text) - returns true, if text has length characters, false otherwise\n";
     }
 }
